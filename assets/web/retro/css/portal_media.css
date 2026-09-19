@@ -53,3 +53,9 @@ body.portal-blackhole-video-selected .border.active.black-hole-active .ring-1 .p
   position: relative;
   z-index: 1;
 }
+
+/* The Iris add-on inserts its canvas after ring-1. Keep it above every
+   Wormhole/Black Hole image and video layer. */
+.border .iris-mechanism {
+  z-index: 2;
+}
