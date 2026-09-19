@@ -10,17 +10,19 @@ usage() {
 Usage:
   ./install.sh [--target /home/pi/sg1_v4/web] [--dry-run] [--keep-crosshair]
 
-Universal SG1 retro wormhole/blackhole GIF injector.
+Retro Wormhole Animation v2 installer for SG1 v4.
 
 Compatible targets:
   --target /home/pi/sg1_v4
   --target /home/pi/sg1_v4/web
 
 What it changes:
-  - copies wormhole.gif and blackhole.gif into retro/images/
-  - injects GIF image layers into retro/dial.html and retro/dial9.html
-  - appends safe CSS rules into retro/css/dial.css and retro/css/dial9.css
-  - patches retro/js/dial.js so blackhole.gif is shown for black hole wormholes
+  - adds the Select Wormhole media library to debug.htm
+  - manages Wormhole and Black Hole GIF, PNG, JPG/JPEG, MP4, and WebM uploads
+  - converts video to browser-compatible MP4/H.264
+  - injects circular, centered image/video layers into Retro dial pages
+  - adds per-file scaling from 50 to 250 percent
+  - patches only marked fragments and adds isolated JS/CSS/module files
   - hides center crosshair by default
   - creates a timestamped backup before editing
 
@@ -62,6 +64,7 @@ fi
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ASSET_DIR="$SCRIPT_DIR/assets/retro/images"
+APP_ROOT="$(dirname "$TARGET")"
 
 need_file() {
   if [ ! -f "$1" ]; then
@@ -79,9 +82,12 @@ need_dir() {
 
 need_file "$ASSET_DIR/wormhole.gif"
 need_file "$ASSET_DIR/blackhole.gif"
+need_file "$SCRIPT_DIR/assets/classes/portal_media_manager.py"
+need_file "$SCRIPT_DIR/assets/web/js/portal_media_debug.js"
+need_file "$SCRIPT_DIR/assets/web/retro/js/portal_media.js"
+need_file "$SCRIPT_DIR/assets/web/retro/css/portal_media.css"
+need_file "$SCRIPT_DIR/portal_media_patch.py"
 need_dir "$TARGET/retro"
-
-mkdir -p "$TARGET/retro/images" "$TARGET/retro/css"
 
 for f in \
   "$TARGET/retro/dial.html" \
@@ -91,7 +97,7 @@ for f in \
   need_file "$f"
 done
 
-BACKUP_BASE="$TARGET/backups/wormhole-blackhole-gif-universal-$(date +%Y%m%d_%H%M%S)"
+BACKUP_BASE="$TARGET/backups/retro-wormhole-animation-v2-$(date +%Y%m%d_%H%M%S)"
 BACKUP_DIR="$BACKUP_BASE"
 suffix=1
 while [ -e "$BACKUP_DIR" ]; do
@@ -105,19 +111,52 @@ echo "Backup: $BACKUP_DIR"
 if [ "$DRY_RUN" -eq 1 ]; then
   echo "Dry run only. No files will be changed."
 else
-  mkdir -p "$BACKUP_DIR/retro/css" "$BACKUP_DIR/retro/images"
+  mkdir -p "$TARGET/retro/images" "$TARGET/retro/css" "$TARGET/retro/js" "$TARGET/js" "$APP_ROOT/classes" "$APP_ROOT/config"
+  mkdir -p "$BACKUP_DIR/original"
+  : > "$BACKUP_DIR/manifest.tsv"
+  backup_path() {
+    local rel="$1"
+    local source="$APP_ROOT/$rel"
+    if [ -e "$source" ]; then
+      printf '1\t%s\n' "$rel" >> "$BACKUP_DIR/manifest.tsv"
+      mkdir -p "$BACKUP_DIR/original/$(dirname "$rel")"
+      cp -a "$source" "$BACKUP_DIR/original/$rel"
+    else
+      printf '0\t%s\n' "$rel" >> "$BACKUP_DIR/manifest.tsv"
+    fi
+  }
+  backup_path classes/web_server.py
+  backup_path classes/portal_media_manager.py
+  backup_path config/portal-media.json
+  backup_path web/debug.htm
+  backup_path web/js/portal_media_debug.js
+  for interface in web/retro web/guest113/retro; do
+    [ -d "$APP_ROOT/$interface" ] || continue
+    backup_path "$interface/dial.html"
+    backup_path "$interface/dial9.html"
+    backup_path "$interface/css/dial.css"
+    backup_path "$interface/css/dial9.css"
+    backup_path "$interface/css/portal_media.css"
+    backup_path "$interface/js/dial.js"
+    backup_path "$interface/js/portal_media.js"
+    backup_path "$interface/images/wormhole.gif"
+    backup_path "$interface/images/blackhole.gif"
+  done
+  printf '%s\n' "$BACKUP_DIR" > "$TARGET/backups/.retro-wormhole-animation-latest"
 
-  cp "$TARGET/retro/dial.html" "$BACKUP_DIR/retro/dial.html"
-  cp "$TARGET/retro/dial9.html" "$BACKUP_DIR/retro/dial9.html"
-  cp "$TARGET/retro/css/dial.css" "$BACKUP_DIR/retro/css/dial.css"
-  cp "$TARGET/retro/css/dial9.css" "$BACKUP_DIR/retro/css/dial9.css"
-  [ -f "$TARGET/retro/js/dial.js" ] && mkdir -p "$BACKUP_DIR/retro/js" && cp "$TARGET/retro/js/dial.js" "$BACKUP_DIR/retro/js/dial.js" || true
-
-  [ -f "$TARGET/retro/images/wormhole.gif" ] && cp "$TARGET/retro/images/wormhole.gif" "$BACKUP_DIR/retro/images/wormhole.gif" || true
-  [ -f "$TARGET/retro/images/blackhole.gif" ] && cp "$TARGET/retro/images/blackhole.gif" "$BACKUP_DIR/retro/images/blackhole.gif" || true
-
+  cp "$SCRIPT_DIR/assets/classes/portal_media_manager.py" "$APP_ROOT/classes/portal_media_manager.py"
+  cp "$SCRIPT_DIR/assets/web/js/portal_media_debug.js" "$TARGET/js/portal_media_debug.js"
+  cp "$SCRIPT_DIR/assets/web/retro/js/portal_media.js" "$TARGET/retro/js/portal_media.js"
+  cp "$SCRIPT_DIR/assets/web/retro/css/portal_media.css" "$TARGET/retro/css/portal_media.css"
   cp "$ASSET_DIR/wormhole.gif" "$TARGET/retro/images/wormhole.gif"
   cp "$ASSET_DIR/blackhole.gif" "$TARGET/retro/images/blackhole.gif"
+  if [ -d "$TARGET/guest113/retro" ]; then
+    mkdir -p "$TARGET/guest113/retro/images" "$TARGET/guest113/retro/js" "$TARGET/guest113/retro/css"
+    cp "$SCRIPT_DIR/assets/web/retro/js/portal_media.js" "$TARGET/guest113/retro/js/portal_media.js"
+    cp "$SCRIPT_DIR/assets/web/retro/css/portal_media.css" "$TARGET/guest113/retro/css/portal_media.css"
+    cp "$ASSET_DIR/wormhole.gif" "$TARGET/guest113/retro/images/wormhole.gif"
+    cp "$ASSET_DIR/blackhole.gif" "$TARGET/guest113/retro/images/blackhole.gif"
+  fi
 fi
 
 python3 - "$TARGET" "$DRY_RUN" "$HIDE_CROSSHAIR" <<'PY'
@@ -324,6 +363,12 @@ for rel in ("retro/css/dial.css", "retro/css/dial9.css"):
 
 patch_dial_js(target / "retro/js/dial.js")
 PY
+
+if [ "$DRY_RUN" -eq 1 ]; then
+  python3 "$SCRIPT_DIR/portal_media_patch.py" "$APP_ROOT" --dry-run
+else
+  python3 "$SCRIPT_DIR/portal_media_patch.py" "$APP_ROOT"
+fi
 
 if [ "$DRY_RUN" -eq 1 ]; then
   echo "Dry run completed."

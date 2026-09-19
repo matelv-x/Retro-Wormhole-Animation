@@ -1,45 +1,77 @@
-# Retro Wormhole GIF
+# Retro Wormhole Animation
 
-[![Downloads](https://img.shields.io/github/downloads/matelv-x/Retro-Wormhole-GIF/total?label=downloads)](https://github.com/matelv-x/Retro-Wormhole-GIF/releases)
+[![Downloads](https://img.shields.io/github/downloads/matelv-x/Retro-Wormhole-Animation/total?label=downloads)](https://github.com/matelv-x/Retro-Wormhole-Animation/releases)
+[![Latest release](https://img.shields.io/github/v/release/matelv-x/Retro-Wormhole-Animation)](https://github.com/matelv-x/Retro-Wormhole-Animation/releases/latest)
 
-Animated wormhole and black-hole GIF enhancement for the Stargate Retro web interface.
+Animated, user-selectable Wormhole and Black Hole media for the Stargate SG1 v4 Retro web interface.
 
-<img width="242" height="229" alt="Original_Wormhole" src="https://github.com/user-attachments/assets/2f572690-dd58-448b-880f-6d743ada7184" /> 
-<img width="232" height="216" alt="GIF_Wormhole" src="https://github.com/user-attachments/assets/45c580e8-03a8-49d6-8ab0-e2c5e23ce416" />
+<img width="242" height="229" alt="Original Wormhole" src="https://github.com/user-attachments/assets/2f572690-dd58-448b-880f-6d743ada7184" />
+<img width="232" height="216" alt="Animated Wormhole" src="https://github.com/user-attachments/assets/45c580e8-03a8-49d6-8ab0-e2c5e23ce416" />
 
+## Version 2 features
+
+- Adds **Select Wormhole** to `debug.htm` without replacing the page.
+- Opens one picker with separate **Wormhole** and **Black Hole** tabs.
+- Accepts GIF, PNG, JPG/JPEG, MP4, and WebM files.
+- Converts MP4 and WebM uploads to MP4/H.264 with `yuv420p` and fast-start metadata for Safari compatibility.
+- Automatically assigns sequential names such as `wormhole1.gif`, `wormhole2.mp4`, `blackhole1.png`, and `blackhole2.mp4`.
+- Provides thumbnail previews, selection, upload, right-click or checkbox deletion, and an individual 50–250% scale for every file.
+- Centers and crops media into the inner Stargate ring with a circular mask and `object-fit: cover`.
+- Supports Safari, Firefox, Chrome, and Chromium-based kiosk browsers.
+- Protects the original `wormhole.gif` and `blackhole.gif` from deletion.
+- Applies the media library to both the primary Retro interface and `guest113` when that optional interface exists.
 
 ## Install
 
-Clone or unzip this add-on into `/home/pi`, then run:
+Requirements:
+
+- Stargate SG1 v4 in `/home/pi/sg1_v4`
+- Python 3 and Pillow in the Stargate runtime
+- `ffmpeg` for MP4 or WebM uploads
 
 ```bash
 cd /home/pi
-rm -rf Retro-Wormhole-GIF
-git clone https://github.com/matelv-x/Retro-Wormhole-GIF.git
-cd Retro-Wormhole-GIF
+rm -rf Retro-Wormhole-Animation
+git clone https://github.com/matelv-x/Retro-Wormhole-Animation.git
+cd Retro-Wormhole-Animation
 chmod +x install.sh restore.sh
 sudo ./install.sh --target /home/pi/sg1_v4
 sudo systemctl restart stargate.service
 ```
 
-## Restore / uninstall
+The installer creates a timestamped backup before changing anything. Run a read-only compatibility check first if desired:
 
 ```bash
-cd /home/pi/Retro-Wormhole-GIF
+sudo ./install.sh --target /home/pi/sg1_v4 --dry-run
+```
+
+## Restore the state from before installation
+
+```bash
+cd /home/pi/Retro-Wormhole-Animation
 sudo ./restore.sh --target /home/pi/sg1_v4
 sudo systemctl restart stargate.service
 ```
 
-## What it changes
+The v2 restore uses the exact manifest and backup made by the most recent install. Uploaded numbered media are left intact so personal files are not destroyed accidentally.
 
-- Adds `wormhole.gif` and `blackhole.gif`.
-- Updates only its own marked fragments inside Retro `dial.html`, `dial9.html`, related CSS, and `dial.js`.
-- Preserves Ring Symbols and other additions already present in those files.
-- Removes only its own fragments during restore instead of replacing whole files.
-- Supports `--keep-crosshair` and `--dry-run`.
+## Previous GIF-only version
+
+The original GIF-only edition remains available as the [`v1.0.0` release](https://github.com/matelv-x/Retro-Wormhole-Animation/releases/tag/v1.0.0). Each GitHub release also provides source ZIP and TAR archives.
+
+## Surgical installation boundaries
+
+The installer:
+
+- patches only marked route blocks in `classes/web_server.py`;
+- adds isolated `portal_media_manager.py`, `portal_media_debug.js`, `portal_media.js`, and `portal_media.css` files;
+- inserts only marked script/style tags and the two circular SVG media layers;
+- preserves Ring Symbols and unrelated Stargate customizations;
+- never changes `web/fan113`;
+- supports `--keep-crosshair` and `--dry-run`.
 
 ## Attribution and originality
 
 Original base project: https://github.com/polklabs/stargate-retro
-The Retro pages being patched come from the Polklabs Retro UI project:
-matelv-x/Codex modification: this repository adds the wormhole/black-hole GIF overlay behavior and packaging for the SG1 v4 Retro web interface.
+
+The Retro pages being patched come from the Polklabs Retro UI project. This repository contains the matelv-x SG1 v4 add-on, installer, media-management code, and Wormhole/Black Hole overlay behavior.

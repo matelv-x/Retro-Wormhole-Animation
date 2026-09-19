@@ -1,0 +1,55 @@
+/* RETRO WORMHOLE ANIMATION V2 */
+div:not(.active) .ring-1 .wormhole-gif,
+div:not(.active) .ring-1 .blackhole-gif,
+div:not(.active) .ring-1 .portal-wormhole-video,
+div:not(.active) .ring-1 .portal-blackhole-video {
+  display: none;
+}
+
+.ring-1 .blackhole-gif,
+.ring-1 .portal-wormhole-video,
+.ring-1 .portal-blackhole-video,
+.border.black-hole-active .ring-1 .wormhole-gif {
+  display: none;
+}
+
+.border.black-hole-active .ring-1 .blackhole-gif {
+  display: block;
+}
+
+body.portal-wormhole-video-selected .border.active:not(.black-hole-active) .ring-1 .portal-wormhole-video,
+body.portal-blackhole-video-selected .border.active.black-hole-active .ring-1 .portal-blackhole-video {
+  display: block;
+  position: absolute;
+  left: 14.8368%;
+  top: 14.6269%;
+  width: 70.3264%;
+  height: 70.7463%;
+  border-radius: 50%;
+  clip-path: circle(50% at 50% 50%);
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.ring-1 .portal-media-video video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+  transform-origin: center center;
+}
+
+.ring-1 .portal-wormhole-video video {
+  transform: scale(var(--portal-wormhole-scale, 1));
+}
+
+.ring-1 .portal-blackhole-video video {
+  transform: scale(var(--portal-blackhole-scale, 1));
+}
+
+.ring-1 > svg {
+  position: relative;
+  z-index: 1;
+}
