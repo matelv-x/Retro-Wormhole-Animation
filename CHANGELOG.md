@@ -2,6 +2,9 @@
 
 ## 2.0.2 - 2026-09-19
 
+- Preserved compatible MP4/H.264 video streams instead of re-encoding them,
+  preventing Safari frame-cadence judder while still removing audio and moving
+  MP4 metadata to the beginning of the file.
 - Restored the Safari-specific video compositing fix: WebKit circular clipping,
   GPU-backed layers, hidden backfaces, and explicit inline playback attributes.
 - Refreshed both portal media asset cache keys so Safari does not reuse the old

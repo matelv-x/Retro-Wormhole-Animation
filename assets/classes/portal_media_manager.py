@@ -152,13 +152,43 @@ class PortalMediaManager:
             output_fd, output_name = tempfile.mkstemp(suffix=".mp4")
             os.close(output_fd)
             output_path = Path(output_name)
-            command = [
-                "ffmpeg", "-nostdin", "-v", "error", "-y", "-i", str(source_path),
-                "-map", "0:v:0", "-an", "-c:v", "libx264", "-preset", "veryfast",
-                "-crf", "23", "-pix_fmt", "yuv420p",
-                "-vf", "scale=trunc(iw/2)*2:trunc(ih/2)*2",
-                "-movflags", "+faststart", str(output_path),
-            ]
+            stream_copy = False
+            if source_extension == ".mp4" and shutil.which("ffprobe"):
+                probe = subprocess.run(
+                    [
+                        "ffprobe", "-v", "error", "-select_streams", "v:0",
+                        "-show_entries", "stream=codec_name,pix_fmt",
+                        "-of", "json", str(source_path),
+                    ],
+                    capture_output=True, text=True, timeout=60, check=False,
+                )
+                if probe.returncode == 0:
+                    try:
+                        streams = json.loads(probe.stdout).get("streams", [])
+                        stream = streams[0] if streams else {}
+                        stream_copy = (
+                            stream.get("codec_name") == "h264"
+                            and stream.get("pix_fmt") in ("yuv420p", "yuvj420p")
+                        )
+                    except (TypeError, ValueError, json.JSONDecodeError):
+                        stream_copy = False
+
+            if stream_copy:
+                # Do not re-encode an already Safari-compatible MP4. Re-encoding
+                # changed its frame cadence and caused visible judder in Safari.
+                command = [
+                    "ffmpeg", "-nostdin", "-v", "error", "-y", "-i", str(source_path),
+                    "-map", "0:v:0", "-an", "-c:v", "copy",
+                    "-movflags", "+faststart", str(output_path),
+                ]
+            else:
+                command = [
+                    "ffmpeg", "-nostdin", "-v", "error", "-y", "-i", str(source_path),
+                    "-map", "0:v:0", "-an", "-c:v", "libx264", "-preset", "veryfast",
+                    "-crf", "20", "-profile:v", "main", "-pix_fmt", "yuv420p",
+                    "-vf", "scale=trunc(iw/2)*2:trunc(ih/2)*2",
+                    "-movflags", "+faststart", str(output_path),
+                ]
             try:
                 converted = subprocess.run(command, capture_output=True, text=True, timeout=900, check=False)
             except (OSError, subprocess.TimeoutExpired) as ex:
