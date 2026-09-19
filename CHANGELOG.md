@@ -2,6 +2,10 @@
 
 ## 2.0.2 - 2026-09-19
 
+- Restored the Safari-specific video compositing fix: WebKit circular clipping,
+  GPU-backed layers, hidden backfaces, and explicit inline playback attributes.
+- Refreshed both portal media asset cache keys so Safari does not reuse the old
+  CSS or JavaScript.
 - Kept the SG1 Iris canvas above Wormhole and Black Hole GIF, image, and video layers.
 - Refreshed the media stylesheet cache key so browsers load the Iris stacking fix immediately.
 - Fixed placement of **Select Wormhole** so it appears directly after **Close Wormhole**.

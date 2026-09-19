@@ -20,6 +20,11 @@
     video.loop = true;
     video.playsInline = true;
     video.preload = 'auto';
+    video.setAttribute('muted', '');
+    video.setAttribute('autoplay', '');
+    video.setAttribute('loop', '');
+    video.setAttribute('playsinline', '');
+    video.setAttribute('webkit-playsinline', '');
     layer.appendChild(video);
     ring.insertBefore(layer, ring.firstChild);
     return video;

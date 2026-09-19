@@ -26,10 +26,17 @@ body.portal-blackhole-video-selected .border.active.black-hole-active .ring-1 .p
   width: 70.3264%;
   height: 70.7463%;
   border-radius: 50%;
+  -webkit-clip-path: circle(50% at 50% 50%);
   clip-path: circle(50% at 50% 50%);
   overflow: hidden;
   pointer-events: none;
   z-index: 0;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  will-change: transform;
+  contain: paint;
 }
 
 .ring-1 .portal-media-video video {
@@ -39,14 +46,19 @@ body.portal-blackhole-video-selected .border.active.black-hole-active .ring-1 .p
   object-fit: cover;
   object-position: center center;
   transform-origin: center center;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  will-change: transform;
 }
 
 .ring-1 .portal-wormhole-video video {
-  transform: scale(var(--portal-wormhole-scale, 1));
+  -webkit-transform: translateZ(0) scale(var(--portal-wormhole-scale, 1));
+  transform: translateZ(0) scale(var(--portal-wormhole-scale, 1));
 }
 
 .ring-1 .portal-blackhole-video video {
-  transform: scale(var(--portal-blackhole-scale, 1));
+  -webkit-transform: translateZ(0) scale(var(--portal-blackhole-scale, 1));
+  transform: translateZ(0) scale(var(--portal-blackhole-scale, 1));
 }
 
 .ring-1 > svg {
