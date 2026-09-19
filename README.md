@@ -19,7 +19,6 @@ Animated, user-selectable Wormhole and Black Hole media for the Stargate SG1 v4 
 - Centers and crops media into the inner Stargate ring with a circular mask and `object-fit: cover`.
 - Supports Safari, Firefox, Chrome, and Chromium-based kiosk browsers.
 - Protects the original `wormhole.gif` and `blackhole.gif` from deletion.
-- Applies the media library to both the primary Retro interface and `guest113` when that optional interface exists.
 
 ## Install
 
