@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.0.1 - 2026-09-19
+
+- Added `restore.sh --remove-all` for complete removal of the legacy v1 overlay and v2 integration.
+- Reused the smallest available sequence number after a media file is deleted.
+- Confirmed WebM upload and automatic conversion to Safari-compatible MP4/H.264.
+- Added explicit deletion of numbered Wormhole/Black Hole uploads when complete removal is requested.
+- Preserved the default manifest-based restore behavior and all historical releases.
+
 ## 2.0.0 - 2026-09-19
 
 - Added the Select Wormhole control to the SG1 v4 debug page.

@@ -200,7 +200,9 @@ class PortalMediaManager:
             match = number_pattern.fullmatch(filename)
             if match:
                 used_numbers.add(int(match.group(1)) if match.group(1) else 0)
-        next_number = max(used_numbers, default=0) + 1
+        next_number = 1
+        while next_number in used_numbers:
+            next_number += 1
         filename = f"{media_type}{next_number}{extension}"
 
         temporary_paths = []

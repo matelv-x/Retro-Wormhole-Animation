@@ -13,7 +13,10 @@ def write_if_changed(path, text):
     print(f"Updated: {path}")
 
 
-target = Path(sys.argv[1] if len(sys.argv) > 1 else "/home/pi/sg1_v4/web")
+arguments = sys.argv[1:]
+remove_all_media = "--remove-all-media" in arguments
+paths = [argument for argument in arguments if not argument.startswith("--")]
+target = Path(paths[0] if paths else "/home/pi/sg1_v4/web")
 if (target / "web/retro").is_dir():
     target = target / "web"
 if not (target / "retro").is_dir():
@@ -87,11 +90,22 @@ for interface in interfaces:
         text = text.replace("  updateBlackHoleGifState();\n\n", "")
         write_if_changed(path, text)
 
-for rel in ("retro/images/wormhole.gif", "retro/images/blackhole.gif"):
-    path = target / rel
-    if path.exists():
-        path.unlink()
-        print(f"Removed: {path}")
+numbered_media = re.compile(
+    r"^(?:wormhole|blackhole)\d+\.(?:gif|png|jpe?g|mp4|webm)$",
+    re.IGNORECASE,
+)
+for interface in interfaces:
+    image_dir = interface / "images"
+    for name in ("wormhole.gif", "blackhole.gif"):
+        path = image_dir / name
+        if path.is_file():
+            path.unlink()
+            print(f"Removed: {path}")
+    if remove_all_media and image_dir.is_dir():
+        for path in image_dir.iterdir():
+            if path.is_file() and numbered_media.fullmatch(path.name):
+                path.unlink()
+                print(f"Removed uploaded media: {path}")
 
 for path in (
     app_root / "classes/portal_media_manager.py",
@@ -100,6 +114,7 @@ for path in (
     target / "retro/css/portal_media.css",
     target / "guest113/retro/js/portal_media.js",
     target / "guest113/retro/css/portal_media.css",
+    app_root / "config/portal-media.json",
 ):
     if path.is_file():
         path.unlink()
