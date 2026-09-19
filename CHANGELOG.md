@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.0.2 - 2026-09-19
+
+- Fixed placement of **Select Wormhole** so it appears directly after **Close Wormhole**.
+- Kept the media picker hidden until **Select Wormhole** is clicked.
+- Added compatibility with both the Dynamic-Wormhole menu button and the original SG1 v4 **Open Wormhole** button.
+
 ## 2.0.1 - 2026-09-19
 
 - Added `restore.sh --remove-all` for complete removal of the legacy v1 overlay and v2 integration.

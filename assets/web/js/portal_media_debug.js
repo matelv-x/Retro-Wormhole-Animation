@@ -184,16 +184,20 @@
 
   function buildUi() {
     if ($('#selectWormholeGifButton').length) return;
-    const anchor = $('#openWormholeMenuButton');
+    const anchor = $('#openWormholeMenuButton').first().length
+      ? $('#openWormholeMenuButton').first()
+      : $('button.controlButton[action="wormhole_on"]').first();
     if (!anchor.length) return;
-    const closeButton = anchor.closest('.debug_button_container').find('button').last();
+    const closeButton = anchor.nextAll('button.controlButton[action="wormhole_off"]').first().length
+      ? anchor.nextAll('button.controlButton[action="wormhole_off"]').first()
+      : $('button.controlButton[action="wormhole_off"]').first();
     const selectButton = anchor.clone(false)
       .attr('id', 'selectWormholeGifButton')
       .removeAttr('action')
       .text('Select Wormhole');
     (closeButton.length ? closeButton : anchor).after(selectButton);
 
-    const picker = $('<div id="portalMediaPicker"></div>').appendTo('body');
+    const picker = $('<div id="portalMediaPicker" style="display:none;"></div>').appendTo('body');
     const modes = $('<div></div>').css({display: 'flex', gap: '8px', 'margin-bottom': '12px'}).appendTo(picker);
     $('<button type="button" id="portalModeWormhole" class="btn-secondary">Wormhole</button>')
       .css({width: '164px', height: '48px'}).appendTo(modes);

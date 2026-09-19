@@ -91,7 +91,7 @@ def patch_web_server(path, dry_run=False):
 
 def patch_script_page(path, script, dry_run=False):
     text = path.read_text(encoding="utf-8", errors="ignore")
-    tag = f'    <!-- {MARK} -->\n    <script src="{script}?v=2.0.1"></script>\n'
+    tag = f'    <!-- {MARK} -->\n    <script src="{script}?v=2.0.2"></script>\n'
     pattern = re.compile(
         r'\s*<!-- ' + re.escape(MARK) + r' -->\s*<script src="'
         + re.escape(script) + r'\?v=[^"]+"></script>\s*'
@@ -137,8 +137,8 @@ def ensure_gate_layers(text):
 def patch_dial_page(path, dry_run=False):
     text = path.read_text(encoding="utf-8", errors="ignore")
     text = ensure_gate_layers(text)
-    css = f'    <!-- {MARK} -->\n    <link rel="stylesheet" href="css/portal_media.css?v=2.0.1">\n'
-    js = f'    <!-- {MARK} -->\n    <script src="js/portal_media.js?v=2.0.1"></script>\n'
+    css = f'    <!-- {MARK} -->\n    <link rel="stylesheet" href="css/portal_media.css?v=2.0.2">\n'
+    js = f'    <!-- {MARK} -->\n    <script src="js/portal_media.js?v=2.0.2"></script>\n'
     css_pattern = re.compile(
         r'\s*<!-- ' + re.escape(MARK)
         + r' -->\s*<link rel="stylesheet" href="css/portal_media\.css\?v=[^"]+">\s*'
