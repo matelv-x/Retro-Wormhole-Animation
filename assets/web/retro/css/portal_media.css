@@ -37,6 +37,14 @@ body.portal-blackhole-video-selected .border.active.black-hole-active .ring-1 .p
   isolation: isolate;
 }
 
+/* Chrome paints the legacy Black Hole danger-gradient circle above the HTML
+   video even though the video is playing correctly behind the SVG. Hide only
+   that center fill when a Black Hole video is selected; the gate SVG, chevrons,
+   and Iris remain above the media layer. */
+body.portal-blackhole-video-selected .border.active.black-hole-active .ring-1 svg circle[fill="url(#radialGradientDanger)"] {
+  fill: transparent !important;
+}
+
 .ring-1 .portal-media-video video {
   display: block;
   width: 100%;

@@ -2,6 +2,9 @@
 
 ## 2.0.2 - 2026-09-19
 
+- Fixed Chrome Black Hole video visibility by suppressing the legacy SVG
+  danger-gradient fill only while a Black Hole video is selected.
+- Corrected README image aspect ratios while keeping repository-hosted assets.
 - Replaced CSS `clip-path` video cropping with compositor-friendly circular
   `border-radius` overflow clipping, avoiding Safari per-frame repaint judder.
 - Removed paint containment from the live video layer while retaining GPU-backed
