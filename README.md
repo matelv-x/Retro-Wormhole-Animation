@@ -5,11 +5,11 @@
 
 Animated, user-selectable Wormhole and Black Hole media for the Stargate SG1 v4 Retro web interface.
 
-<img width="232" height="216" alt="Original Wormhole" src="https://github.com/user-attachments/assets/2f572690-dd58-448b-880f-6d743ada7184" />
-<img width="232" height="216" alt="Animated Wormhole" src="https://github.com/user-attachments/assets/45c580e8-03a8-49d6-8ab0-e2c5e23ce416" />
-<img width="232" height="235" alt="Select Wormhole" src="https://github.com/user-attachments/assets/9d66cd64-d5b4-47bb-8b9c-765bd1b68fe0" />
-<img width="232" height="235" alt="Select Black Hole" src="https://github.com/user-attachments/assets/9316c084-e3f0-4096-a7a3-8745f7f24d81" />
-<img width="1060" height="159" alt="New “Select Wormhole” button" src="https://github.com/user-attachments/assets/8c3bdb48-98c1-4525-929b-a10dee9189ad" />
+<img width="232" height="216" alt="Original Wormhole" src="./images/original-wormhole.png" />
+<img width="232" height="216" alt="Animated Wormhole" src="./images/animated-wormhole.png" />
+<img width="232" height="235" alt="Select Wormhole" src="./images/select-wormhole.png" />
+<img width="232" height="235" alt="Select Black Hole" src="./images/select-black-hole.png" />
+<img width="1060" height="159" alt="New Select Wormhole button" src="./images/select-wormhole-button.png" />
 
 ## Version 2 features
 
