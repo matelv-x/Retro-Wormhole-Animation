@@ -137,8 +137,8 @@ def ensure_gate_layers(text):
 def patch_dial_page(path, dry_run=False):
     text = path.read_text(encoding="utf-8", errors="ignore")
     text = ensure_gate_layers(text)
-    css = f'    <!-- {MARK} -->\n    <link rel="stylesheet" href="css/portal_media.css?v=2.0.2-safari-video-fix">\n'
-    js = f'    <!-- {MARK} -->\n    <script src="js/portal_media.js?v=2.0.2-safari-video-fix"></script>\n'
+    css = f'    <!-- {MARK} -->\n    <link rel="stylesheet" href="css/portal_media.css?v=2.0.2-safari-smooth-video">\n'
+    js = f'    <!-- {MARK} -->\n    <script src="js/portal_media.js?v=2.0.2-safari-smooth-video"></script>\n'
     css_pattern = re.compile(
         r'\s*<!-- ' + re.escape(MARK)
         + r' -->\s*<link rel="stylesheet" href="css/portal_media\.css\?v=[^"]+">\s*'

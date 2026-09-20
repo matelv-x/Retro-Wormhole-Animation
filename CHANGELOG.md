@@ -2,6 +2,10 @@
 
 ## 2.0.2 - 2026-09-19
 
+- Replaced CSS `clip-path` video cropping with compositor-friendly circular
+  `border-radius` overflow clipping, avoiding Safari per-frame repaint judder.
+- Removed paint containment from the live video layer while retaining GPU-backed
+  scaling and exact circular cropping.
 - Preserved compatible MP4/H.264 video streams instead of re-encoding them,
   preventing Safari frame-cadence judder while still removing audio and moving
   MP4 metadata to the beginning of the file.

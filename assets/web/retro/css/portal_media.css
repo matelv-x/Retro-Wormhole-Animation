@@ -26,8 +26,6 @@ body.portal-blackhole-video-selected .border.active.black-hole-active .ring-1 .p
   width: 70.3264%;
   height: 70.7463%;
   border-radius: 50%;
-  -webkit-clip-path: circle(50% at 50% 50%);
-  clip-path: circle(50% at 50% 50%);
   overflow: hidden;
   pointer-events: none;
   z-index: 0;
@@ -36,7 +34,7 @@ body.portal-blackhole-video-selected .border.active.black-hole-active .ring-1 .p
   -webkit-transform: translateZ(0);
   transform: translateZ(0);
   will-change: transform;
-  contain: paint;
+  isolation: isolate;
 }
 
 .ring-1 .portal-media-video video {
