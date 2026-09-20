@@ -4,11 +4,13 @@ set -euo pipefail
 TARGET="/home/pi/sg1_v4/web"
 DRY_RUN=0
 HIDE_CROSSHAIR=1
+INSTALL_DEPENDENCIES=0
 
 usage() {
   cat <<'EOF'
 Usage:
   ./install.sh [--target /home/pi/sg1_v4/web] [--dry-run] [--keep-crosshair]
+               [--install-dependencies]
 
 Retro Wormhole Animation v2 installer for SG1 v4.
 
@@ -27,8 +29,9 @@ What it changes:
   - creates a timestamped backup before editing
 
 Options:
-  --keep-crosshair  Do not hide the yellow + / red dot crosshair
-  --dry-run         Check files and show actions without writing changes
+  --install-dependencies  Install missing Pillow and ffmpeg dependencies
+  --keep-crosshair        Do not hide the yellow + / red dot crosshair
+  --dry-run               Check files and show actions without writing changes
 EOF
 }
 
@@ -44,6 +47,10 @@ while [ "$#" -gt 0 ]; do
       ;;
     --keep-crosshair)
       HIDE_CROSSHAIR=0
+      shift
+      ;;
+    --install-dependencies)
+      INSTALL_DEPENDENCIES=1
       shift
       ;;
     -h|--help)
@@ -96,6 +103,90 @@ for f in \
   "$TARGET/retro/css/dial9.css"; do
   need_file "$f"
 done
+
+run_privileged() {
+  if [ "$(id -u)" -eq 0 ]; then
+    "$@"
+  elif command -v sudo >/dev/null 2>&1; then
+    sudo "$@"
+  else
+    echo "ERROR: installing dependencies requires root privileges or sudo." >&2
+    exit 1
+  fi
+}
+
+detect_stargate_python() {
+  local interpreter=""
+  local service_command=""
+  if command -v systemctl >/dev/null 2>&1; then
+    service_command="$(systemctl show stargate.service -p ExecStart --value 2>/dev/null || true)"
+    interpreter="$(printf '%s\n' "$service_command" | sed -n 's/.*path=\([^ ;]*\).*/\1/p')"
+  fi
+  if [ -z "$interpreter" ] || [ ! -x "$interpreter" ]; then
+    if [ -x "$(dirname "$APP_ROOT")/venv_v4/bin/python" ]; then
+      interpreter="$(dirname "$APP_ROOT")/venv_v4/bin/python"
+    else
+      interpreter="$(command -v python3 || true)"
+    fi
+  fi
+  if [ -z "$interpreter" ] || [ ! -x "$interpreter" ]; then
+    echo "ERROR: unable to find the Python interpreter used by SG1 v4." >&2
+    exit 1
+  fi
+  printf '%s\n' "$interpreter"
+}
+
+SG1_PYTHON="$(detect_stargate_python)"
+echo "Stargate Python: $SG1_PYTHON"
+
+missing_dependencies=()
+if ! "$SG1_PYTHON" -c 'from PIL import Image; assert {"GIF", "JPEG", "PNG"}.issubset(set(Image.registered_extensions().values()))' >/dev/null 2>&1; then
+  missing_dependencies+=("Pillow")
+fi
+if ! command -v ffmpeg >/dev/null 2>&1; then
+  missing_dependencies+=("ffmpeg")
+fi
+
+if [ "${#missing_dependencies[@]}" -gt 0 ]; then
+  echo "Missing dependencies: ${missing_dependencies[*]}"
+  if [ "$DRY_RUN" -eq 1 ]; then
+    echo "Dry run: rerun with --install-dependencies to install them."
+  elif [ "$INSTALL_DEPENDENCIES" -eq 0 ]; then
+    echo "ERROR: required dependencies are missing." >&2
+    echo "Rerun with --install-dependencies:" >&2
+    echo "  sudo ./install.sh --target $(dirname "$TARGET") --install-dependencies" >&2
+    exit 1
+  else
+    if [[ " ${missing_dependencies[*]} " == *" Pillow "* ]]; then
+      if "$SG1_PYTHON" -c 'import sys; raise SystemExit(0 if sys.prefix != sys.base_prefix else 1)'; then
+        if ! "$SG1_PYTHON" -m pip --version >/dev/null 2>&1; then
+          run_privileged apt-get update
+          run_privileged apt-get install -y python3-venv python3-pip
+          run_privileged "$SG1_PYTHON" -m ensurepip --upgrade
+        fi
+        run_privileged "$SG1_PYTHON" -m pip install Pillow
+      else
+        run_privileged apt-get update
+        run_privileged apt-get install -y python3-pil
+      fi
+    fi
+    if [[ " ${missing_dependencies[*]} " == *" ffmpeg "* ]]; then
+      run_privileged apt-get update
+      run_privileged apt-get install -y ffmpeg
+    fi
+  fi
+fi
+
+if [ "$DRY_RUN" -eq 0 ]; then
+  if ! "$SG1_PYTHON" -c 'from PIL import Image; assert {"GIF", "JPEG", "PNG"}.issubset(set(Image.registered_extensions().values()))' >/dev/null 2>&1; then
+    echo "ERROR: Pillow is still unavailable in $SG1_PYTHON." >&2
+    exit 1
+  fi
+  if ! command -v ffmpeg >/dev/null 2>&1; then
+    echo "ERROR: ffmpeg is still unavailable after dependency installation." >&2
+    exit 1
+  fi
+fi
 
 BACKUP_BASE="$TARGET/backups/retro-wormhole-animation-v2-$(date +%Y%m%d_%H%M%S)"
 BACKUP_DIR="$BACKUP_BASE"

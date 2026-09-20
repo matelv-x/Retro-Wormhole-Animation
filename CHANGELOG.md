@@ -2,6 +2,9 @@
 
 ## 2.0.2 - 2026-09-19
 
+- Added dependency detection against the Python interpreter actually used by
+  `stargate.service`, plus `--install-dependencies` for missing Pillow and
+  ffmpeg on clean Raspberry Pi 3 installations.
 - Removed all `guest113` installation, patching, media synchronization, backup,
   and removal behavior. The installer now manages only the main `web/retro`
   interface.

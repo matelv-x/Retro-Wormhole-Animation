@@ -17,14 +17,20 @@ sudo ./install.sh --target /home/pi/sg1_v4 --dry-run
 
 ```bash
 cd /home/pi/Retro-Wormhole-Animation
-sudo ./install.sh --target /home/pi/sg1_v4
+sudo ./install.sh --target /home/pi/sg1_v4 --install-dependencies
 sudo systemctl restart stargate.service
 ```
+
+The installer checks dependencies before modifying SG1 v4. With
+`--install-dependencies`, missing Pillow is installed into the exact Python
+environment used by `stargate.service`, and missing `ffmpeg` is installed
+through APT. Without this option, missing dependencies stop installation with
+an actionable error.
 
 ## Keep the original center crosshair
 
 ```bash
-sudo ./install.sh --target /home/pi/sg1_v4 --keep-crosshair
+sudo ./install.sh --target /home/pi/sg1_v4 --install-dependencies --keep-crosshair
 sudo systemctl restart stargate.service
 ```
 

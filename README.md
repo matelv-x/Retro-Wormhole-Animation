@@ -31,9 +31,15 @@ rm -rf Retro-Wormhole-Animation
 git clone https://github.com/matelv-x/Retro-Wormhole-Animation.git
 cd Retro-Wormhole-Animation
 chmod +x install.sh restore.sh
-sudo ./install.sh --target /home/pi/sg1_v4
+sudo ./install.sh --target /home/pi/sg1_v4 --install-dependencies
 sudo systemctl restart stargate.service
 ```
+
+`--install-dependencies` detects the Python interpreter used by
+`stargate.service`. It installs Pillow into that exact virtual environment and
+installs `ffmpeg` through APT only when either dependency is missing. This is
+required on clean Raspberry Pi 3 installations that do not include Pillow in
+`/home/pi/venv_v4`.
 
 The installer creates a timestamped backup before changing anything. Run a read-only compatibility check first if desired:
 
@@ -73,7 +79,7 @@ The installer:
 - inserts only marked script/style tags and the two circular SVG media layers;
 - preserves Ring Symbols and unrelated Stargate customizations;
 - never changes `web/fan113`;
-- supports `--keep-crosshair` and `--dry-run`.
+- supports `--install-dependencies`, `--keep-crosshair`, and `--dry-run`.
 
 ## Attribution and originality
 
