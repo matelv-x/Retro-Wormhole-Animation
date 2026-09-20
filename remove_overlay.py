@@ -50,9 +50,6 @@ if debug.is_file():
     write_if_changed(debug, text)
 
 interfaces = [target / "retro"]
-guest = target / "guest113/retro"
-if guest.is_dir():
-    interfaces.append(guest)
 
 for interface in interfaces:
   for name in ("dial.html", "dial9.html"):
@@ -118,8 +115,6 @@ for path in (
     target / "js/portal_media_debug.js",
     target / "retro/js/portal_media.js",
     target / "retro/css/portal_media.css",
-    target / "guest113/retro/js/portal_media.js",
-    target / "guest113/retro/css/portal_media.css",
     app_root / "config/portal-media.json",
 ):
     if path.is_file():

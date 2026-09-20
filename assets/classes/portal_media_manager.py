@@ -24,11 +24,7 @@ class PortalMediaManager:
         self.config_path = self.app_dir / "config" / "portal-media.json"
 
     def _image_dirs(self):
-        directories = [self.web_dir / "retro" / "images"]
-        guest = self.web_dir / "guest113" / "retro" / "images"
-        if guest.parent.is_dir():
-            directories.append(guest)
-        return directories
+        return [self.web_dir / "retro" / "images"]
 
     @staticmethod
     def _atomic_json(path, data):

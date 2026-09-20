@@ -214,14 +214,10 @@ def main():
 
     patch_web_server(app / "classes/web_server.py", dry_run)
     patch_script_page(web / "debug.htm", "/js/portal_media_debug.js", dry_run)
-    interfaces = [web / "retro"]
-    guest = web / "guest113" / "retro"
-    if guest.is_dir():
-        interfaces.append(guest)
-    for interface in interfaces:
-        for page in ("dial.html", "dial9.html"):
-            patch_dial_page(interface / page, dry_run)
-        patch_dial_js(interface / "js/dial.js", dry_run)
+    interface = web / "retro"
+    for page in ("dial.html", "dial9.html"):
+        patch_dial_page(interface / page, dry_run)
+    patch_dial_js(interface / "js/dial.js", dry_run)
 
 
 if __name__ == "__main__":

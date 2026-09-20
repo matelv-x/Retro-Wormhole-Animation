@@ -2,6 +2,9 @@
 
 ## 2.0.2 - 2026-09-19
 
+- Removed all `guest113` installation, patching, media synchronization, backup,
+  and removal behavior. The installer now manages only the main `web/retro`
+  interface.
 - Made repeated installation byte-stable and made `--remove-all` restore the
   original HTML, CSS, and server formatting without accumulating whitespace.
 - Fixed Chrome and Brave MP4 visibility by keeping video filenames out of SVG
@@ -43,7 +46,6 @@
 - Added thumbnail preview, selection, protected deletion, and per-file 50–250% scaling.
 - Added centered circular cropping for images and video.
 - Added automatic video conversion to Safari-compatible MP4/H.264.
-- Added optional `guest113` synchronization while explicitly excluding `fan113`.
 - Added exact manifest-based restore for installer-managed files.
 
 ## 1.0.0 - 2026-09-17

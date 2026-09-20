@@ -130,7 +130,7 @@ else
   backup_path config/portal-media.json
   backup_path web/debug.htm
   backup_path web/js/portal_media_debug.js
-  for interface in web/retro web/guest113/retro; do
+  for interface in web/retro; do
     [ -d "$APP_ROOT/$interface" ] || continue
     backup_path "$interface/dial.html"
     backup_path "$interface/dial9.html"
@@ -150,13 +150,6 @@ else
   cp "$SCRIPT_DIR/assets/web/retro/css/portal_media.css" "$TARGET/retro/css/portal_media.css"
   cp "$ASSET_DIR/wormhole.gif" "$TARGET/retro/images/wormhole.gif"
   cp "$ASSET_DIR/blackhole.gif" "$TARGET/retro/images/blackhole.gif"
-  if [ -d "$TARGET/guest113/retro" ]; then
-    mkdir -p "$TARGET/guest113/retro/images" "$TARGET/guest113/retro/js" "$TARGET/guest113/retro/css"
-    cp "$SCRIPT_DIR/assets/web/retro/js/portal_media.js" "$TARGET/guest113/retro/js/portal_media.js"
-    cp "$SCRIPT_DIR/assets/web/retro/css/portal_media.css" "$TARGET/guest113/retro/css/portal_media.css"
-    cp "$ASSET_DIR/wormhole.gif" "$TARGET/guest113/retro/images/wormhole.gif"
-    cp "$ASSET_DIR/blackhole.gif" "$TARGET/guest113/retro/images/blackhole.gif"
-  fi
 fi
 
 python3 - "$TARGET" "$DRY_RUN" "$HIDE_CROSSHAIR" <<'PY'
