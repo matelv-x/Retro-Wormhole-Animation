@@ -2,6 +2,8 @@
 
 ## 2.0.2 - 2026-09-19
 
+- Fixed Chrome and Brave MP4 visibility by keeping video filenames out of SVG
+  image elements and hiding the corresponding SVG media layer during playback.
 - Fixed Chrome Black Hole video visibility by suppressing the legacy SVG
   danger-gradient fill only while a Black Hole video is selected.
 - Corrected README image aspect ratios while keeping repository-hosted assets.

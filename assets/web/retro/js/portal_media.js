@@ -30,8 +30,8 @@
     return video;
   }
 
-  function updateImage(image, filename, scale) {
-    if (!image) return;
+  function updateImage(image, filename, scale, enabled) {
+    if (!image || !enabled) return;
     const source = 'images/' + encodeURIComponent(filename);
     image.setAttribute('href', source);
     image.setAttributeNS('http://www.w3.org/1999/xlink', 'href', source);
@@ -73,8 +73,8 @@
     document.documentElement.style.setProperty('--portal-blackhole-scale', String(blackholeScale));
 
     document.querySelectorAll('.ring-1').forEach(function (ring) {
-      updateImage(ring.querySelector('.wormhole-gif'), wormhole.selected, wormholeScale);
-      updateImage(ring.querySelector('.blackhole-gif'), blackhole.selected, blackholeScale);
+      updateImage(ring.querySelector('.wormhole-gif'), wormhole.selected, wormholeScale, !isVideo(wormhole.selected));
+      updateImage(ring.querySelector('.blackhole-gif'), blackhole.selected, blackholeScale, !isVideo(blackhole.selected));
       updateVideo(ensureVideoLayer(ring, 'wormhole'), wormhole.selected, isVideo(wormhole.selected));
       updateVideo(ensureVideoLayer(ring, 'blackhole'), blackhole.selected, isVideo(blackhole.selected));
     });

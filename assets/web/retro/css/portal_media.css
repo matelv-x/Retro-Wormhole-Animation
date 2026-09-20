@@ -17,6 +17,13 @@ div:not(.active) .ring-1 .portal-blackhole-video {
   display: block;
 }
 
+/* Never pass MP4/WebM through an SVG <image>. Chromium may paint the failed
+   SVG media layer above the working HTML video element. */
+body.portal-wormhole-video-selected .border.active:not(.black-hole-active) .ring-1 .wormhole-gif,
+body.portal-blackhole-video-selected .border.active.black-hole-active .ring-1 .blackhole-gif {
+  display: none !important;
+}
+
 body.portal-wormhole-video-selected .border.active:not(.black-hole-active) .ring-1 .portal-wormhole-video,
 body.portal-blackhole-video-selected .border.active.black-hole-active .ring-1 .portal-blackhole-video {
   display: block;
