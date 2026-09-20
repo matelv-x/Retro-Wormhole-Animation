@@ -2,6 +2,8 @@
 
 ## 2.0.2 - 2026-09-19
 
+- Made repeated installation byte-stable and made `--remove-all` restore the
+  original HTML, CSS, and server formatting without accumulating whitespace.
 - Fixed Chrome and Brave MP4 visibility by keeping video filenames out of SVG
   image elements and hiding the corresponding SVG media layer during playback.
 - Fixed Chrome Black Hole video visibility by suppressing the legacy SVG

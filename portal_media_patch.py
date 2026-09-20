@@ -27,6 +27,16 @@ def insert_before(text, marker, addition, label):
     return text.replace(marker, addition + marker, 1)
 
 
+def insert_before_line(text, marker, addition, label):
+    """Insert before a closing-tag line without inheriting its indentation."""
+    pattern = re.compile(r"^[ \t]*" + re.escape(marker), re.MULTILINE)
+    match = pattern.search(text)
+    if not match:
+        raise RuntimeError(f"Cannot find {label} insertion point")
+    indentation = match.group(0)[:-len(marker)]
+    return text[:match.start()] + addition + indentation + marker + text[match.end():]
+
+
 def patch_web_server(path, dry_run=False):
     text = path.read_text(encoding="utf-8", errors="ignore")
     get_block = '''            # RETRO WORMHOLE ANIMATION V2 GET START
@@ -93,13 +103,14 @@ def patch_script_page(path, script, dry_run=False):
     text = path.read_text(encoding="utf-8", errors="ignore")
     tag = f'    <!-- {MARK} -->\n    <script src="{script}?v=2.0.2"></script>\n'
     pattern = re.compile(
-        r'\s*<!-- ' + re.escape(MARK) + r' -->\s*<script src="'
-        + re.escape(script) + r'\?v=[^"]+"></script>\s*'
+        r'^[ \t]*<!-- ' + re.escape(MARK) + r' -->[ \t]*\r?\n[ \t]*<script src="'
+        + re.escape(script) + r'\?v=[^"]+"></script>[ \t]*(?:\r?\n)?',
+        re.MULTILINE,
     )
     if pattern.search(text):
-        text = pattern.sub("\n" + tag, text, count=1)
+        text = pattern.sub(tag, text, count=1)
     else:
-        text = insert_before(text, "</body>", tag, f"script tag in {path}")
+        text = insert_before_line(text, "</body>", tag, f"script tag in {path}")
     write(path, text, dry_run)
 
 
@@ -140,21 +151,23 @@ def patch_dial_page(path, dry_run=False):
     css = f'    <!-- {MARK} -->\n    <link rel="stylesheet" href="css/portal_media.css?v=2.0.2-chromium-svg-media">\n'
     js = f'    <!-- {MARK} -->\n    <script src="js/portal_media.js?v=2.0.2-chromium-svg-media"></script>\n'
     css_pattern = re.compile(
-        r'\s*<!-- ' + re.escape(MARK)
-        + r' -->\s*<link rel="stylesheet" href="css/portal_media\.css\?v=[^"]+">\s*'
+        r'^[ \t]*<!-- ' + re.escape(MARK)
+        + r' -->[ \t]*\r?\n[ \t]*<link rel="stylesheet" href="css/portal_media\.css\?v=[^"]+">[ \t]*(?:\r?\n)?',
+        re.MULTILINE,
     )
     js_pattern = re.compile(
-        r'\s*<!-- ' + re.escape(MARK)
-        + r' -->\s*<script src="js/portal_media\.js\?v=[^"]+"></script>\s*'
+        r'^[ \t]*<!-- ' + re.escape(MARK)
+        + r' -->[ \t]*\r?\n[ \t]*<script src="js/portal_media\.js\?v=[^"]+"></script>[ \t]*(?:\r?\n)?',
+        re.MULTILINE,
     )
     if css_pattern.search(text):
-        text = css_pattern.sub("\n" + css, text, count=1)
+        text = css_pattern.sub(css, text, count=1)
     else:
-        text = insert_before(text, "</head>", css, f"CSS tag in {path}")
+        text = insert_before_line(text, "</head>", css, f"CSS tag in {path}")
     if js_pattern.search(text):
-        text = js_pattern.sub("\n" + js, text, count=1)
+        text = js_pattern.sub(js, text, count=1)
     else:
-        text = insert_before(text, "</body>", js, f"JS tag in {path}")
+        text = insert_before_line(text, "</body>", js, f"JS tag in {path}")
     write(path, text, dry_run)
 
 

@@ -32,15 +32,20 @@ if server.is_file():
         ("            # RETRO WORMHOLE ANIMATION V2 UPLOAD LIMIT START", "            # RETRO WORMHOLE ANIMATION V2 UPLOAD LIMIT END"),
         ("            # RETRO WORMHOLE ANIMATION V2 POST START", "            # RETRO WORMHOLE ANIMATION V2 POST END"),
     ):
-        text = re.sub(r"\n?" + re.escape(start) + r"[\s\S]*?" + re.escape(end) + r"\n?", "\n", text)
+        text = re.sub(
+            r"\n[ \t]*" + re.escape(start) + r"[\s\S]*?" + re.escape(end) + r"[ \t]*\n+",
+            "\n",
+            text,
+        )
     write_if_changed(server, text)
 
 debug = target / "debug.htm"
 if debug.is_file():
     text = debug.read_text(encoding="utf-8", errors="ignore")
     text = re.sub(
-        r'\s*<!-- RETRO WORMHOLE ANIMATION V2 -->\s*<script src="/js/portal_media_debug\.js\?v=[^"]+"></script>\s*',
-        "\n", text,
+        r'^[ \t]*<!-- RETRO WORMHOLE ANIMATION V2 -->[ \t]*\r?\n'
+        r'[ \t]*<script src="/js/portal_media_debug\.js\?v=[^"]+"></script>[ \t]*(?:\r?\n)?',
+        "", text, flags=re.MULTILINE,
     )
     write_if_changed(debug, text)
 
@@ -54,8 +59,9 @@ for interface in interfaces:
     path = interface / name
     text = path.read_text(encoding="utf-8", errors="ignore")
     text = re.sub(
-        r'\s*<!-- RETRO WORMHOLE ANIMATION V2 -->\s*<(?:link rel="stylesheet" href="css/portal_media\.css\?v=[^"]+"|script src="js/portal_media\.js\?v=[^"]+"></script)>\s*',
-        "\n", text,
+        r'^[ \t]*<!-- RETRO WORMHOLE ANIMATION V2 -->[ \t]*\r?\n'
+        r'[ \t]*<(?:link rel="stylesheet" href="css/portal_media\.css\?v=[^"]+"|script src="js/portal_media\.js\?v=[^"]+"></script)>[ \t]*(?:\r?\n)?',
+        "", text, flags=re.MULTILINE,
     )
     text = re.sub(r"\s*<!-- WORMHOLE BLACKHOLE GIF UNIVERSAL PATCH -->\s*", "\n", text)
     text = re.sub(r'\s*<image class="wormhole-gif"[^>]*/>\s*', "\n", text)
@@ -72,7 +78,7 @@ for rel in ("retro/css/dial.css", "retro/css/dial9.css"):
     path = target / rel
     text = path.read_text(encoding="utf-8", errors="ignore")
     text = re.sub(
-        r"\n?/\* WORMHOLE BLACKHOLE GIF UNIVERSAL PATCH START \*/[\s\S]*?/\* WORMHOLE BLACKHOLE GIF UNIVERSAL PATCH END \*/\n?",
+        r"\n*/\* WORMHOLE BLACKHOLE GIF UNIVERSAL PATCH START \*/[\s\S]*?/\* WORMHOLE BLACKHOLE GIF UNIVERSAL PATCH END \*/\s*\Z",
         "\n",
         text,
     )
