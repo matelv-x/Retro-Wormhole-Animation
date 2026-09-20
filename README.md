@@ -5,11 +5,11 @@
 
 Animated, user-selectable Wormhole and Black Hole media for the Stargate SG1 v4 Retro web interface.
 
-<img width="232" height="219" alt="Original Wormhole" src="./images/original-wormhole.png" />
-<img width="232" height="216" alt="Animated Wormhole" src="./images/animated-wormhole.png" />
-<img width="232" height="421" alt="Select Wormhole" src="./images/select-wormhole.png" />
-<img width="232" height="415" alt="Select Black Hole" src="./images/select-black-hole.png" />
-<img width="1060" height="159" alt="New Select Wormhole button" src="./images/select-wormhole-button.png" />
+<img width="232" height="219" alt="Original Wormhole" src="https://raw.githubusercontent.com/matelv-x/Retro-Wormhole-Animation/main/images/original-wormhole.png?v=2.0.2-safari" />
+<img width="232" height="216" alt="Animated Wormhole" src="https://raw.githubusercontent.com/matelv-x/Retro-Wormhole-Animation/main/images/animated-wormhole.png?v=2.0.2-safari" />
+<img width="232" height="421" alt="Select Wormhole" src="https://raw.githubusercontent.com/matelv-x/Retro-Wormhole-Animation/main/images/select-wormhole.png?v=2.0.2-safari" />
+<img width="232" height="415" alt="Select Black Hole" src="https://raw.githubusercontent.com/matelv-x/Retro-Wormhole-Animation/main/images/select-black-hole.png?v=2.0.2-safari" />
+<img width="1060" height="159" alt="New Select Wormhole button" src="https://raw.githubusercontent.com/matelv-x/Retro-Wormhole-Animation/main/images/select-wormhole-button.png?v=2.0.2-safari" />
 
 ## Version 2 features
 
