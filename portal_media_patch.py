@@ -148,8 +148,8 @@ def ensure_gate_layers(text):
 def patch_dial_page(path, dry_run=False):
     text = path.read_text(encoding="utf-8", errors="ignore")
     text = ensure_gate_layers(text)
-    css = f'    <!-- {MARK} -->\n    <link rel="stylesheet" href="css/portal_media.css?v=2.0.2-chromium-svg-media">\n'
-    js = f'    <!-- {MARK} -->\n    <script src="js/portal_media.js?v=2.0.2-chromium-svg-media"></script>\n'
+    css = f'    <!-- {MARK} -->\n    <link rel="stylesheet" href="css/portal_media.css?v=2.0.2-retro-layer-order">\n'
+    js = f'    <!-- {MARK} -->\n    <script src="js/portal_media.js?v=2.0.2-retro-layer-order"></script>\n'
     css_pattern = re.compile(
         r'^[ \t]*<!-- ' + re.escape(MARK)
         + r' -->[ \t]*\r?\n[ \t]*<link rel="stylesheet" href="css/portal_media\.css\?v=[^"]+">[ \t]*(?:\r?\n)?',

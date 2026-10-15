@@ -84,3 +84,11 @@ body.portal-blackhole-video-selected .border.active.black-hole-active .ring-1 sv
 .border .iris-mechanism {
   z-index: 2;
 }
+
+/* Keep the original Retro status surfaces readable above portal media and the
+   Iris. These are the only Retro elements that overlap the gate opening. */
+.border > .timer-wrapper,
+.border > .gdo-wrapper,
+.border > .info-box {
+  z-index: 3;
+}

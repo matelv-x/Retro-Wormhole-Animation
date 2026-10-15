@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+- Kept the original Retro timer, GDO, and status message above Wormhole,
+  Black Hole, and Iris layers.
+- Refreshed the portal media cache key so browsers load the corrected layer
+  order immediately.
+
 ## 2.0.2 - 2026-09-19
 
 - Added dependency detection against the Python interpreter actually used by
