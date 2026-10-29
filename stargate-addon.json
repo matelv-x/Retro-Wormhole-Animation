@@ -1,5 +1,6 @@
 {
   "maintenance_contract": 1,
+  "uninstall_contract": 2,
   "id": "retro-wormhole-animation",
   "name": "Retro Wormhole Animation",
   "repository": "matelv-x/Retro-Wormhole-Animation",
@@ -7,5 +8,6 @@
   "detect": {"all": [{"path": "classes/portal_media_manager.py"}, {"path": "web/retro/js/portal_media.js"}]},
   "install": {"argv": ["./install.sh", "--target", "{sg1_root}", "--install-dependencies"], "timeout": 1200},
   "uninstall": {"argv": ["./restore.sh", "--target", "{sg1_root}"], "timeout": 900},
+  "archive_integration_files": ["classes/web_server.py"],
   "restart_required": true
 }
